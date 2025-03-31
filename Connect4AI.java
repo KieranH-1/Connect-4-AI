@@ -1,7 +1,7 @@
+
 // Connect 4 AI game using Minimax algorithm with alpha-beta pruning
 // The AI uses a heuristic evaluation function to score the board position
 import java.util.Scanner;
-
 
 public class Connect4AI {
     private static final int ROWS = 6;
@@ -10,15 +10,14 @@ public class Connect4AI {
     private static final char AI = 'O';
     private static final char EMPTY = '.';
     private static final int DEPTH = 5;
-   
     private char[][] board = new char[ROWS][COLS];
-   
+    
     public Connect4AI() {
         for (int i = 0; i < ROWS; i++)
             for (int j = 0; j < COLS; j++)
                 board[i][j] = EMPTY;
     }
-   
+
     public void printBoard() {
         for (char[] row : board) {
             for (char cell : row) {
@@ -28,11 +27,15 @@ public class Connect4AI {
         }
         System.out.println("1 2 3 4 5 6 7");
     }
-   
+
     public boolean isValidMove(int col) {
         return board[0][col] == EMPTY;
     }
-   
+    
+    public boolean isValidMove(int col) {
+        return board[0][col] == EMPTY;
+    }
+    
     public boolean makeMove(int col, char player) {
         for (int i = ROWS - 1; i >= 0; i--) {
             if (board[i][col] == EMPTY) {
@@ -42,7 +45,7 @@ public class Connect4AI {
         }
         return false;
     }
-   
+
     public void undoMove(int col) {
         for (int i = 0; i < ROWS; i++) {
             if (board[i][col] != EMPTY) {
@@ -51,7 +54,7 @@ public class Connect4AI {
             }
         }
     }
-   
+
     public boolean isWin(char player) {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
@@ -65,7 +68,7 @@ public class Connect4AI {
         }
         return false;
     }
-   
+
     private boolean checkDirection(int r, int c, int dr, int dc, char player) {
         int count = 0;
         for (int i = 0; i < 4; i++) {
@@ -77,17 +80,16 @@ public class Connect4AI {
         }
         return count == 4;
     }
-   
+
     public boolean isFull() {
         for (int j = 0; j < COLS; j++) {
             if (board[0][j] == EMPTY) return false;
         }
         return true;
     }
-   
+
     public int scorePosition(char player) {
         int score = 0;
-
 
         int evaluation_board[][] = {
             {3, 4, 5, 7, 5, 4, 3},
@@ -97,7 +99,6 @@ public class Connect4AI {
             {4, 6, 8, 10, 8, 6, 4},
             {3, 4, 5, 7, 5, 4, 3}
         };
-
 
         int player_score = 0;
         int ai_score = 0;
@@ -111,14 +112,13 @@ public class Connect4AI {
             }
         }
 
-
         score = ai_score - player_score;
         return score;
     }
     private boolean is_terminal() {
         return isWin(PLAYER) || isWin(AI) || isFull();
     }
-   
+
     public int minimax(int depth, boolean maximizing, int alpha, int beta) {
         boolean is_terminal = is_terminal();
         if (depth == 0 || is_terminal)
@@ -130,8 +130,6 @@ public class Connect4AI {
                 return scorePosition(AI); // Dummy call to get the score
             }
 
-
-       
         if (maximizing) {
             int maxEval = Integer.MIN_VALUE;
             for (int col = 0; col < COLS; col++) {
@@ -160,7 +158,7 @@ public class Connect4AI {
             return minEval;
         }
     }
-   
+  
     public int bestMove() {
         int bestVal = Integer.MIN_VALUE;
         int move = -1;
@@ -177,7 +175,7 @@ public class Connect4AI {
         }
         return move;
     }
-   
+
     public void play() {
         Scanner scanner = new Scanner(System.in);
         printBoard();
@@ -198,7 +196,7 @@ public class Connect4AI {
                 System.out.println("It's a draw!");
                 break;
             }
-           
+
             System.out.println("AI's turn...");
             int aiMove = bestMove();
             makeMove(aiMove, AI);
@@ -214,11 +212,8 @@ public class Connect4AI {
         }
         scanner.close();
     }
-   
+
     public static void main(String[] args) {
         new Connect4AI().play();
     }
 }
-
-
-
