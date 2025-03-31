@@ -27,10 +27,6 @@ public class Connect4AI {
         }
         System.out.println("1 2 3 4 5 6 7");
     }
-
-    public boolean isValidMove(int col) {
-        return board[0][col] == EMPTY;
-    }
     
     public boolean isValidMove(int col) {
         return board[0][col] == EMPTY;
