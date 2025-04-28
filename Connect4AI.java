@@ -171,7 +171,10 @@ public class Connect4AI {
         }
         return move;
     }
-
+    public char[][] getBoard() {
+        return board;
+    }
+    
     public void play() {
         Scanner scanner = new Scanner(System.in);
         printBoard();
@@ -206,6 +209,7 @@ public class Connect4AI {
                 break;
             }
         }
+        
         scanner.close();
     }
 
