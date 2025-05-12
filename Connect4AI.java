@@ -6,11 +6,12 @@ import java.util.Scanner;
 public class Connect4AI {
     private static final int ROWS = 6;
     private static final int COLS = 7;
-    private static final char PLAYER = 'X';
-    private static final char AI = 'O';
     private static final char EMPTY = '.';
     private static final int DEPTH = 5;
     private char[][] board = new char[ROWS][COLS];
+    private int difficulty = 1; // Default AI difficulty level
+    private static final char PLAYER = 'X';
+    private static final char AI = 'O';
     
     public Connect4AI() {
         for (int i = 0; i < ROWS; i++)
@@ -84,10 +85,34 @@ public class Connect4AI {
         return true;
     }
 
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
     public int scorePosition(char player) {
         int score = 0;
-
-        int evaluation_board[][] = {
+        
+        int[][] evaluation_board;
+        if (difficulty == 1) {
+            evaluation_board = new int[][] {
+            {3, 4, 5, 6, 5, 4, 3},
+            {3, 4, 5, 6, 5, 4, 3},
+            {3, 4, 5, 6, 5, 4, 3},
+            {3, 4, 5, 6, 5, 4, 3},
+            {3, 4, 5, 6, 5, 4, 3},
+            {3, 4, 5, 6, 5, 4, 3}
+        };
+        } else if (difficulty == 2) {
+            evaluation_board = new int[][] { 
+            {3, 3, 3, 3, 3, 3, 3},
+            {3, 4, 4, 4, 4, 4, 3},
+            {3, 4, 5, 6, 5, 4, 3},
+            {3, 4, 5, 6, 5, 4, 3},
+            {3, 4, 4, 4, 4, 4, 3},
+            {3, 3, 3, 3, 3, 3, 3}
+        };
+        } else {
+            evaluation_board = new int[][] { 
             {3, 4, 5, 7, 5, 4, 3},
             {4, 6, 8, 10, 8, 6, 4},
             {5, 8, 11, 13, 11, 8, 5},
@@ -95,6 +120,8 @@ public class Connect4AI {
             {4, 6, 8, 10, 8, 6, 4},
             {3, 4, 5, 7, 5, 4, 3}
         };
+        }
+        
 
         int player_score = 0;
         int ai_score = 0;
@@ -111,20 +138,12 @@ public class Connect4AI {
         score = ai_score - player_score;
         return score;
     }
-    private boolean is_terminal() {
-        return isWin(PLAYER) || isWin(AI) || isFull();
-    }
 
     public int minimax(int depth, boolean maximizing, int alpha, int beta) {
-        boolean is_terminal = is_terminal();
-        if (depth == 0 || is_terminal)
-            if (is_terminal) {
-                if (isWin(PLAYER)) return -1000000;
-                else if (isWin(AI)) return 1000000;
-                else return 0;
-            } else {
-                return scorePosition(AI); // Dummy call to get the score
-            }
+     
+        if (isWin(PLAYER)) return -1000000;
+        if (isWin(AI)) return 1000000;
+        if (depth == 0 || isFull()) return scorePosition(AI);
 
         if (maximizing) {
             int maxEval = Integer.MIN_VALUE;
@@ -175,45 +194,5 @@ public class Connect4AI {
         return board;
     }
     
-    public void play() {
-        Scanner scanner = new Scanner(System.in);
-        printBoard();
-        while (true) {
-            System.out.print("Enter column (1-7): ");
-            int playerMove = scanner.nextInt() - 1;
-            if (playerMove < 0 || playerMove >= COLS || !isValidMove(playerMove)) {
-                System.out.println("Invalid move. Try again.");
-                continue;
-            }
-            makeMove(playerMove, PLAYER);
-            printBoard();
-            if (isWin(PLAYER)) {
-                System.out.println("You win!");
-                break;
-            }
-            if (isFull()) {
-                System.out.println("It's a draw!");
-                break;
-            }
-
-            System.out.println("AI's turn...");
-            int aiMove = bestMove();
-            makeMove(aiMove, AI);
-            printBoard();
-            if (isWin(AI)) {
-                System.out.println("AI wins!");
-                break;
-            }
-            if (isFull()) {
-                System.out.println("It's a draw!");
-                break;
-            }
-        }
-        
-        scanner.close();
-    }
-
-    public static void main(String[] args) {
-        new Connect4AI().play();
-    }
+   
 }

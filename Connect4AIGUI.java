@@ -11,6 +11,7 @@ public class Connect4AIGUI extends JFrame {
     private static final char EMPTY = '.';
     private JButton[][] buttons = new JButton[ROWS][COLS];
     private Connect4AI game = new Connect4AI();
+    private boolean playerGoesFirst = true; 
 
     public Connect4AIGUI() {
         setTitle("Connect 4 AI");
@@ -72,7 +73,43 @@ public class Connect4AIGUI extends JFrame {
         add(controlPanel, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(null);
+
+        chooseSettings();
+
+        if (!playerGoesFirst) {
+            int aiMove = game.bestMove();
+            game.makeMove(aiMove, AI);
+        }
+
         resetGame();
+    }
+
+    private void chooseSettings() {
+        String[] orderOptions = {"Go First", "Go Second"};
+        int orderChoice = JOptionPane.showOptionDialog(
+            this,
+            "Do you want to go first or second?",
+            "Choose Order",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            orderOptions,
+            orderOptions[0]
+        );
+        playerGoesFirst = (orderChoice == 0);
+
+        String[] difficultyOptions = {"Easy", "Medium", "Hard"};
+        int difficultyChoice = JOptionPane.showOptionDialog(
+            this,
+            "Choose AI difficulty:",
+            "AI Difficulty",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            difficultyOptions,
+            difficultyOptions[0]
+        );
+        game.setDifficulty(difficultyChoice + 1);
     }
 
     private void updateBoard() {
@@ -86,6 +123,10 @@ public class Connect4AIGUI extends JFrame {
 
     private void resetGame() {
         game = new Connect4AI();
+        if (!playerGoesFirst) {
+            int aiMove = game.bestMove();
+            game.makeMove(aiMove, AI);
+        }
         updateBoard();
     }
 
